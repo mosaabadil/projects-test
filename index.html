@@ -32,42 +32,76 @@
             font-size: 18px;
         }
         
-        /* Projects grid */
+        /* Projects container */
         .projects-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            display: flex;
+            flex-direction: column;
             gap: 30px;
         }
         
+        /* Project card with expandable details */
         .project-card {
             border: 1px solid #ddd;
             border-radius: 8px;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: box-shadow 0.3s ease;
         }
         
         .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .project-summary {
+            display: flex;
+            padding: 20px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+        
+        .project-summary:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .project-image-container {
+            flex: 0 0 200px;
+            margin-right: 20px;
         }
         
         .project-image {
             width: 100%;
-            height: 180px;
-            background-color: #f0f0f0;
+            height: 120px;
+            background-color: #e0e0e0;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #777;
+            border-radius: 4px;
+            overflow: hidden;
         }
         
-        .project-info {
-            padding: 20px;
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .project-brief {
+            flex: 1;
         }
         
         .project-title {
             margin-top: 0;
+            margin-bottom: 10px;
             color: #2c3e50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .expand-icon {
+            font-size: 24px;
+            transition: transform 0.3s ease;
         }
         
         .project-tags {
@@ -85,16 +119,120 @@
             font-size: 12px;
         }
         
+        /* Expandable content */
+        .project-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background-color: #fff;
+        }
+        
+        .project-details-content {
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .project-details.active {
+            max-height: 2000px; /* Large enough to accommodate content */
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .features-list {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .features-list li {
+            margin-bottom: 8px;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tech-item {
+            background-color: #f0f7ff;
+            color: #0366d6;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .video-container {
+            margin: 20px 0;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 150px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-image img:hover {
+            transform: scale(1.05);
+        }
+        
         .project-links {
-            margin-top: 15px;
+            margin-top: 20px;
             display: flex;
             gap: 15px;
         }
         
-        .project-links a {
+        .project-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #0366d6;
+            color: white;
             text-decoration: none;
-            color: #0366d6;
+            border-radius: 4px;
             font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        
+        .project-link:hover {
+            background-color: #0255af;
         }
         
         /* Footer */
@@ -128,59 +266,134 @@
         <div class="projects-container">
             <!-- Project 1 -->
             <div class="project-card">
-                <div class="project-image">Project Image</div>
-                <div class="project-info">
-                    <h3 class="project-title">Project Name 1</h3>
-                    <p>A brief description of your first project. Explain what it does and why it's interesting or valuable.</p>
-                    <div class="project-tags">
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">React</span>
-                        <span class="tag">CSS</span>
+                <div class="project-summary" onclick="toggleProject(this)">
+                    <div class="project-image-container">
+                        <div class="project-image">
+                            <img src="project1-thumbnail.jpg" alt="Project 1" />
+                        </div>
                     </div>
-                    <div class="project-links">
-                        <a href="#" target="_blank">View Demo</a>
-                        <a href="#" target="_blank">Source Code</a>
+                    <div class="project-brief">
+                        <h3 class="project-title">
+                            Project Name 1
+                            <span class="expand-icon">+</span>
+                        </h3>
+                        <p>A brief description of your first project that gives a quick overview. This is visible without expanding.</p>
+                        <div class="project-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">React</span>
+                            <span class="tag">CSS</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-details">
+                    <div class="project-details-content">
+                        <p>A more detailed description of your project. Explain the problem you were solving, your approach, and the outcome. This can be several paragraphs long and include much more comprehensive information.</p>
+                        
+                        <h4 class="section-title">Key Features</h4>
+                        <ul class="features-list">
+                            <li>Feature 1 with detailed explanation of how it works</li>
+                            <li>Feature 2 with information about implementation challenges</li>
+                            <li>Feature 3 highlighting what makes it special</li>
+                            <li>Feature 4 and how users benefit from it</li>
+                        </ul>
+                        
+                        <h4 class="section-title">Technology Stack</h4>
+                        <div class="tech-stack">
+                            <span class="tech-item">React</span>
+                            <span class="tech-item">Node.js</span>
+                            <span class="tech-item">MongoDB</span>
+                            <span class="tech-item">Express</span>
+                            <span class="tech-item">AWS S3</span>
+                        </div>
+                        
+                        <h4 class="section-title">Project Demo</h4>
+                        <div class="video-container">
+                            <!-- Replace with your YouTube/Vimeo embed code -->
+                            <iframe src="https://www.youtube.com/embed/your-video-id" title="Project Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        
+                        <h4 class="section-title">Screenshots</h4>
+                        <div class="gallery">
+                            <div class="gallery-image">
+                                <img src="project1-screenshot1.jpg" alt="Screenshot 1">
+                            </div>
+                            <div class="gallery-image">
+                                <img src="project1-screenshot2.jpg" alt="Screenshot 2">
+                            </div>
+                            <div class="gallery-image">
+                                <img src="project1-screenshot3.jpg" alt="Screenshot 3">
+                            </div>
+                        </div>
+                        
+                        <h4 class="section-title">Development Process</h4>
+                        <p>Describe your development process, including any interesting challenges you faced and how you overcame them. Talk about your role if it was a team project, and mention any methodologies you used (Agile, Scrum, etc.).</p>
+                        
+                        <div class="project-links">
+                            <a href="#" class="project-link" target="_blank">View Demo</a>
+                            <a href="#" class="project-link" target="_blank">Source Code</a>
+                            <a href="#" class="project-link" target="_blank">Documentation</a>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Project 2 -->
+            <!-- Project 2 (Similar structure) -->
             <div class="project-card">
-                <div class="project-image">Project Image</div>
-                <div class="project-info">
-                    <h3 class="project-title">Project Name 2</h3>
-                    <p>A brief description of your second project. What challenges did you solve? What technologies did you use?</p>
-                    <div class="project-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Machine Learning</span>
-                        <span class="tag">Data Analysis</span>
+                <div class="project-summary" onclick="toggleProject(this)">
+                    <div class="project-image-container">
+                        <div class="project-image">
+                            <img src="project2-thumbnail.jpg" alt="Project 2" />
+                        </div>
                     </div>
-                    <div class="project-links">
-                        <a href="#" target="_blank">View Demo</a>
-                        <a href="#" target="_blank">Source Code</a>
+                    <div class="project-brief">
+                        <h3 class="project-title">
+                            Project Name 2
+                            <span class="expand-icon">+</span>
+                        </h3>
+                        <p>A brief description of your second project. What challenges did you solve? What technologies did you use?</p>
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">Machine Learning</span>
+                            <span class="tag">Data Analysis</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-details">
+                    <div class="project-details-content">
+                        <!-- Similar structure to Project 1's detailed content -->
+                        <p>Detailed description goes here...</p>
+                        
+                        <h4 class="section-title">Key Features</h4>
+                        <ul class="features-list">
+                            <li>Feature 1 - Description</li>
+                            <li>Feature 2 - Description</li>
+                            <li>Feature 3 - Description</li>
+                        </ul>
+                        
+                        <h4 class="section-title">Technology Stack</h4>
+                        <div class="tech-stack">
+                            <span class="tech-item">Python</span>
+                            <span class="tech-item">TensorFlow</span>
+                            <span class="tech-item">Pandas</span>
+                            <span class="tech-item">SQL</span>
+                        </div>
+                        
+                        <h4 class="section-title">Project Demo</h4>
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/your-video-id-2" title="Project Demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        
+                        <!-- More sections as needed -->
+                        
+                        <div class="project-links">
+                            <a href="#" class="project-link" target="_blank">View Demo</a>
+                            <a href="#" class="project-link" target="_blank">Source Code</a>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Project 3 -->
-            <div class="project-card">
-                <div class="project-image">Project Image</div>
-                <div class="project-info">
-                    <h3 class="project-title">Project Name 3</h3>
-                    <p>A brief description of your third project. Highlight key features and your role in developing it.</p>
-                    <div class="project-tags">
-                        <span class="tag">HTML/CSS</span>
-                        <span class="tag">Responsive Design</span>
-                        <span class="tag">UI/UX</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="#" target="_blank">View Demo</a>
-                        <a href="#" target="_blank">Source Code</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Add more project cards as needed -->
+            <!-- Add more projects as needed -->
         </div>
     </main>
     
@@ -193,5 +406,22 @@
             <a href="mailto:your.email@example.com">Email</a>
         </div>
     </footer>
+    
+    <script>
+        function toggleProject(element) {
+            // Find the details panel
+            const details = element.nextElementSibling;
+            // Toggle the active class
+            details.classList.toggle('active');
+            
+            // Update the expand/collapse icon
+            const icon = element.querySelector('.expand-icon');
+            if (details.classList.contains('active')) {
+                icon.textContent = '−'; // Minus sign
+            } else {
+                icon.textContent = '+'; // Plus sign
+            }
+        }
+    </script>
 </body>
 </html>
